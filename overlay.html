@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OBS Overlay</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Roboto Condensed";
+        background: black;
+        color: white;
+        padding: 20px;
+      }
+
+      .overlay {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+
+      .overlay * {
+        background-color: transparent;
+      }
+
+      .overlay div {
+        border-radius: 8px;
+        padding: 4px 15px;
+      }
+
+      .tournament-name {
+        font-size: 1.2em;
+        font-weight: 400;
+        color: #ffffff;
+        margin-left: 30px;
+      }
+
+      .team-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .team-name {
+        font-size: 2em;
+        font-weight: 400;
+        color: #ffffff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .score {
+        font-size: 2em;
+        font-weight: bold;
+        color: #ffffff;
+        text-align: right;
+      }
+
+      .win-condition-wrapper {
+        display: flex;
+        font-size: 1.5em;
+        font-weight: 400;
+        color: #cccccc;
+        margin-left: 30px;
+      }
+
+      .team-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .scores-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+
+      .teams {
+        display: flex;
+        justify-content: space-between;
+        width: auto;
+      }
+
+      .win-con-static {
+        margin-left: -13px;
+        color: rgb(98, 98, 98);
+      }
+
+      .win-condition {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay">
+      <div class="tournament-name" id="tournamentName">Tournament Name</div>
+      <div class="teams" id="teams">
+        <div class="team-wrapper">
+          <div class="team-name" id="team1">Team 1</div>
+          <div class="team-name" id="team2">Team 2</div>
+        </div>
+        <!-- !!! "Score" actually marks amount of set wins. !!! -->
+        <div class="scores-wrapper">
+          <div class="score" id="score1">0</div>
+          <div class="score" id="score2">0</div>
+        </div>
+      </div>  
+      <div class="win-condition-wrapper">
+        <div class="win-con-static" id="winConditionStatic">WIN CONDITION</div>
+        <div class="win-condition" id="winCondition">winCondition</div>
+      </div>
+    </div>
+
+    <script>
+      /*
+      !!!
+
+        ONLY CHANGE THESE VALUES.
+
+      !!!
+      */
+      const tournamentName = "Devil's Arena";
+      const team1 = "The Valentines";
+      const team2 = "Ascent";
+      const score1 = 0;
+      const score2 = 0;
+      const winCondition = "10 stages 4 fresh";
+
+      // DONT TOUCH ANYTHING BELOW UNLESS
+      // YOU KNOW WHAT YOU'RE DOING!
+      document.getElementById("tournamentName").textContent = tournamentName;
+      document.getElementById("team1").textContent = team1;
+      document.getElementById("team2").textContent = team2;
+      document.getElementById("score1").textContent = score1;
+      document.getElementById("score2").textContent = score2;
+      document.getElementById("winCondition").textContent = winCondition;
+
+      function measureTextWidth(text, font) {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        context.font = font;
+        return context.measureText(text).width;
+      }
+
+      const teamsDiv = document.getElementById("teams");
+      const teamNames = [team1, team2];
+      const fontSize = window.getComputedStyle(
+        document.querySelector(".team-name")
+      ).fontSize;
+      const fontFamily = window.getComputedStyle(
+        document.querySelector(".team-name")
+      ).fontFamily;
+      const font = `${fontSize} ${fontFamily}`;
+
+      const longestWidth = Math.max(
+        ...teamNames.map((name) => measureTextWidth(name, font))
+      );
+
+      const scoreWidth = measureTextWidth("00", font);
+      const scaleFactor = 1.3;
+      const adjustedWidth = (longestWidth + scoreWidth + 50) * scaleFactor;
+
+      teamsDiv.style.width = `${adjustedWidth}px`;
+    </script>
+  </body>
+</html>
