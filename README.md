@@ -14,3 +14,5 @@ Download the `overlay.html` file, place it anywhere; import in OBS as Browser so
 - `winCondition`
 
 These are the only properties you should change. You can modify the source code as much as you'd like, if you know what you're doing. I'll be updating this overlay overtime to make it look prettier.
+
+![Example Image](example.png "Example")
