@@ -6,7 +6,9 @@ This is an OBS overlay for DBD streamers to use to display information when they
 
 Download the project either via `Download as Zip` or `git clone` the repository. I'd recommend cloning it as you can stay up-to-date without having to constantly juggle ZIP files and directories.
 
-Next, you will want to go into OBS, create a `Browser Source`, tick the `Local File` and select the `overlay.html` file. Then you're all good to go.
+FIRST, run the binary inside of `bin` directory. This will server a local HTTP server so the application can read from `config.ini` (because OBS doesn't really support the `file://` protocol). 
+
+Next, you will want to go into OBS, create a `Browser Source`, and paste in the following: `http://localhost:8000/overlay.html`. Then you're all good to go.
 
 Now, in order to change the settings of how the overlay displays, you'll find a `config.ini` file within the project. This is what _you_ as the user will be altering. It's broken down into multiple categories:
 
