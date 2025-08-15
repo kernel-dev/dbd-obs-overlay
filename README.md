@@ -4,15 +4,59 @@ This is an OBS overlay for DBD streamers to use to display information when they
 
 ## How to use?
 
-Download the `overlay.html` file, place it anywhere; import in OBS as Browser source, select `Local File` and select the file. Only change the following properties found inside the `<script>` tag:
+Download the project either via `Download as Zip` or `git clone` the repository. I'd recommend cloning it as you can stay up-to-date without having to constantly juggle ZIP files and directories.
 
-- `tournamentName`
-- `team1`
-- `team2`
-- `score1`
-- `score2`
-- `winCondition`
+Next, you will want to go into OBS, create a `Browser Source`, tick the `Local File` and select the `overlay.html` file. Then you're all good to go.
 
-These are the only properties you should change. You can modify the source code as much as you'd like, if you know what you're doing. I'll be updating this overlay overtime to make it look prettier.
+Now, in order to change the settings of how the overlay displays, you'll find a `config.ini` file within the project. This is what _you_ as the user will be altering. It's broken down into multiple categories:
+
+## CategoryInit
+
+This category consists of a single property: `DesiredCategory`. The available options for this are as follows:
+
+- `1v1`
+- `Scrims`
+- `Tournament`
+- `Winstreak`
+
+If you have any suggestions for which categories I might've missed, let me know! However, if for example you want to do a `DuoQ Streak` overlay, you can simply change `Winstreak.TeamName` to `DuoQ Streak` and that should suffice! So please avoid recommending me things that are, _technically_, feature-complete by design.
+
+## Tournament
+
+Properties here should be self-explanatory, but I will list them in any case:
+
+- `TournamentName`
+- `FirstTeamName`
+- `FirstTeamScore`
+- `SecondTeamName`
+- `SecondTeamScore`
+- `?WinCondition`
+
+The reason there's a `?` at the beginning of `WinCondition` (in this small documentation ONLY, the property in the `.ini` file will not include it) is because that means it's marked as an "optional" property, meaning, that you can leave it blank and the program will understand that it shouldn't render a win condition since one hasn't been set yet. If a property (again, solely in this documentation) does not have a `?` at the beginning, that means it is mandatory to fill out.
+
+## Scrims
+
+Only one property:
+
+- `TeamOrKillerName`
+
+## 1v1
+
+- `FirstPlayerName`
+- `FirstPlayerScore`
+- `SecondPlayerName`
+- `SecondPlayerScore`
+- `?WinCondition`
+
+## Winstreak
+
+- `TeamName`
+- `CurrentScore`
+- `?PersonalBest`
+
+
+And that is all! I hope you enjoy this little overlay. All users are free to modify, send contributions and of course incorporate the software into their own applications as they please.
+
+
 
 ![Example Image](example.png "Example")
