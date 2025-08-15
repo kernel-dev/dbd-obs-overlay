@@ -7,7 +7,7 @@
     <style>
       body {
         margin: 0;
-        font-family: "SF Mono", monospace;
+        font-family: "Barlow Condensed";
         background: black;
         color: white;
         padding: 20px;
@@ -31,8 +31,8 @@
       }
 
       .tournament-name {
-        font-size: 1.3em;
-        font-weight: 600;
+        font-size: 1.5em;
+        font-weight: 400;
         color: #87ceeb;
         text-shadow: 0 0 5px rgba(135, 206, 235, 0.7);
         background-color: #1a202c;
@@ -43,8 +43,9 @@
         margin-bottom: -2px;
         position: relative;
         z-index: 3;
-        align-self: flex-start;
         box-shadow: 0 -5px 10px rgba(61, 71, 92, 0.3);
+        display: flex;
+        align-items: center;
       }
 
       .teams {
@@ -54,7 +55,7 @@
         flex-wrap: nowrap;
         max-width: 100%;
         background-color: #2b2d42;
-        border: 2px solid #4a4e69;
+        border: 3px solid #4a4e69;
         border-radius: 0 12px 12px 0px !important;
         box-shadow: none;
         padding: 0 !important;
@@ -71,7 +72,7 @@
 
       .team-name {
         font-size: 2.2em;
-        font-weight: 700;
+        font-weight: 400;
         color: #edf2f4;
         white-space: nowrap;
         overflow: hidden;
@@ -93,7 +94,7 @@
 
       .score {
         font-size: 2.5em;
-        font-weight: 900;
+        font-weight: 600;
         color: #edf2f4;
         background-color: #6a6c80;
         padding: 8px 18px;
@@ -106,7 +107,6 @@
         border-right-style: solid !important;
       }
 
-      
       .score2 {
         border-left-color: #4a4e69 !important;
         border-left-width: 2px !important;
@@ -114,7 +114,16 @@
       }
 
       .remove-border {
-        border: none !important; 
+        border: none !important;
+      }
+
+      .remove-border-radius {
+        border-radius: 0px !important;
+      }
+
+      .force-border-right {
+        border-top-right-radius: 8px !important;
+        border-bottom-right-radius: 8px !important;
       }
 
       .win-condition-wrapper {
@@ -128,7 +137,7 @@
         backdrop-filter: blur(6px);
         -webkit-backdrop-filter: blur(6px);
         display: flex;
-        gap: 10px;
+        justify-content: space-between;
         align-items: center;
         margin-top: -2px;
         box-shadow: 0 5px 10px rgba(65, 90, 119, 0.5);
@@ -137,13 +146,14 @@
       }
 
       .win-con-static {
-        color: #edf2f4;
-        font-weight: 600;
+        color: #e0b983;
+        font-weight: 400;
         text-shadow: 0 0 1px rgba(255, 255, 255, 0.6);
+        padding-left: 0 !important;
       }
 
       .win-condition {
-        font-weight: 900;
+        font-weight: 600;
         color: #e0b983;
         text-shadow: 0 0 3px rgba(224, 185, 131, 0.6);
       }
@@ -173,63 +183,344 @@
         </div>
       </div>
       <div class="win-condition-wrapper" id="win-condition-wrapper">
-        <div class="win-con-static" id="winConditionStatic">PB</div>
-        <div class="win-condition" id="winCondition">winCondition</div>
+        <div class="win-con-static" id="winConditionStatic">Win Condition</div>
+        <div class="win-condition" id="winCondition">4k1</div>
       </div>
     </div>
 
     <script>
-      const tournamentName = "Capsuna Winstreak";
-      const team1 = "Current";
-      const team2 = "";
-      const score1 = 0;
-      const score2 = 0;
-      const winCondition = "3";
+      //=========================================
+      //     FUNCTION FOR PARSING .INI FILES
+      //=========================================
+      function parseIniString(iniString) {
+        const config = {};
+        let currentSection = null;
 
-      const renderWinCondition = true;
-      const renderSecondTeam = false;
+        const lines = iniString.split("\n");
 
-      document.getElementById("tournamentName").textContent = tournamentName;
-      document.getElementById("team1").textContent = team1;
-      document.getElementById("team2").textContent = team2;
-      document.getElementById("score1").textContent = score1;
-      document.getElementById("score2").textContent = score2;
-      document.getElementById("winCondition").textContent = winCondition;
+        for (const line of lines) {
+          const trimmedLine = line.trim();
 
-      document.getElementById("win-condition-wrapper").style.display = !renderWinCondition ? "none" : "";
-      
-      if (!renderSecondTeam) {
-        document.getElementById("score1").classList.add("remove-border");
-        document.getElementById("score2").classList.add("remove-border");
-        document.getElementById("teams").classList.add("remove-border");
-        document.getElementById("score2").style.display = "none";
-        document.getElementById("right-team").style.display = "none";
+          if (
+            trimmedLine.length === 0 ||
+            trimmedLine.startsWith(";") ||
+            trimmedLine.startsWith("#")
+          ) {
+            continue;
+          }
+
+          if (trimmedLine.startsWith("[") && trimmedLine.endsWith("]")) {
+            currentSection = trimmedLine.substring(1, trimmedLine.length - 1);
+            config[currentSection] = {};
+          } else if (trimmedLine.includes("=")) {
+            const parts = trimmedLine.split("=", 2);
+            const key = parts[0].trim();
+            const value = parts[1].split("#")[0].trim();
+
+            if (currentSection) {
+              config[currentSection][key] = value;
+            } else {
+              config[key] = value;
+            }
+          }
+        }
+        return config;
       }
 
-      function measureTextWidth(text, font) {
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-        context.font = font;
-        return context.measureText(text).width;
-      }
+      const adjustScale = () => {
+        const winConWrapper = document.getElementById("win-condition-wrapper");
+        const tourneyName = document.getElementById("tournamentName");
 
-      const teamsDiv = document.getElementById("teams");
-      const teamNames = [team1, team2];
-      const fontSize = window.getComputedStyle(
-        document.querySelector(".team-name")
-      ).fontSize;
-      const fontFamily = window.getComputedStyle(
-        document.querySelector(".team-name")
-      ).fontFamily;
-      const font = `${fontSize} ${fontFamily}`;
+        const tourneyComputed = window.getComputedStyle(tourneyName);
+        const winConComputed = window.getComputedStyle(winConWrapper);
 
-      const longestWidth = Math.max(
-        ...teamNames.map((name) => measureTextWidth(name, font))
-      );
+        console.log(winConComputed.display, tourneyComputed.display);
 
-      const scoreWidth = measureTextWidth("00", font);
-      const scaleFactor = 1.3;
-      const adjustedWidth = (longestWidth + scoreWidth + 50) * scaleFactor;
+        if (
+          winConComputed.display == "none" ||
+          tourneyComputed.display == "none"
+        )
+          return;
+
+        //=========================================
+        //         CALCULATE MAX ELEMENTS
+        //=========================================
+        let largerWidth = Math.max(
+          tourneyName.offsetWidth,
+          winConWrapper.offsetWidth
+        );
+
+        let largerHeight = Math.max(
+          tourneyName.offsetHeight,
+          winConWrapper.offsetHeight
+        );
+
+        //=========================================
+        //        APPLY WIDTH ADJUSTMENTS
+        //=========================================
+        tourneyName.style.minWidth = `${
+          largerWidth -
+          parseFloat(tourneyComputed.paddingLeft) -
+          parseFloat(tourneyComputed.paddingRight) -
+          parseFloat(tourneyComputed.borderLeftWidth) -
+          parseFloat(tourneyComputed.borderRightWidth)
+        }px`;
+
+        winConWrapper.style.minWidth = `${
+          largerWidth -
+          parseFloat(winConComputed.paddingLeft) -
+          parseFloat(winConComputed.paddingRight) -
+          parseFloat(winConComputed.borderLeftWidth) -
+          parseFloat(winConComputed.borderRightWidth)
+        }px`;
+
+        //=========================================
+        //         APPLY HEIGHT ADJUSTMENTS
+        //=========================================
+        tourneyName.style.minHeight = `${
+          largerHeight -
+          parseFloat(tourneyComputed.paddingTop) -
+          parseFloat(tourneyComputed.paddingBottom) -
+          parseFloat(tourneyComputed.borderTopWidth) -
+          parseFloat(tourneyComputed.borderBottomWidth)
+        }px`;
+
+        winConWrapper.style.minHeight = `${
+          largerHeight -
+          parseFloat(winConComputed.paddingTop) -
+          parseFloat(winConComputed.paddingBottom) -
+          parseFloat(winConComputed.borderTopWidth) -
+          parseFloat(winConComputed.borderBottomWidth)
+        }px`;
+      };
+
+      const renderContent = ({
+        tournamentName,
+        firstTeam,
+        firstScore,
+        secondTeam,
+        secondScore,
+        winCondition,
+        staticWinCondition,
+        renderSecondTeam,
+        renderFirstScore,
+        renderWinCondition,
+        hook,
+      }) => {
+        let data = {
+          tournamentNameEl: document.getElementById("tournamentName"),
+          team1El: document.getElementById("team1"),
+          team2El: document.getElementById("team2"),
+          score1El: document.getElementById("score1"),
+          score2El: document.getElementById("score2"),
+          winConditionEl: document.getElementById("winCondition"),
+          staticWinConEl: document.getElementById("winConditionStatic"),
+          winConWrapper: document.getElementById("win-condition-wrapper"),
+          rightTeamEl: document.getElementById("right-team"),
+          teamsEl: document.getElementById("teams"),
+        };
+
+        let {
+          tournamentNameEl,
+          team1El,
+          team2El,
+          score1El,
+          score2El,
+          winConditionEl,
+          staticWinConEl,
+          winConWrapper,
+          rightTeamEl,
+          teamsEl,
+        } = data;
+
+        tournamentNameEl.textContent = tournamentName;
+        team1El.textContent = firstTeam;
+        team2El.textContent = secondTeam;
+        score1El.textContent = firstScore;
+        score2El.textContent = secondScore;
+        winConditionEl.textContent = winCondition;
+        staticWinConEl.textContent = staticWinCondition;
+
+        winConWrapper.style.display = !renderWinCondition ? "none" : "";
+
+        if (!renderSecondTeam) {
+          score1El.classList.add("remove-border");
+          score2El.classList.add("remove-border");
+          score2El.style.display = "none";
+          rightTeamEl.style.display = "none";
+        }
+
+        if (!renderFirstScore) {
+          score1El.classList.add("remove-border");
+          teamsEl.classList.add("remove-border-radius");
+          score1El.style.display = "none";
+        }
+
+        hook(data);
+      };
+
+      const renderTournamentData = (parsedContent) => {
+        const filtered = parsedContent["Tournament"];
+
+        let tournamentName = filtered["TournamentName"],
+          firstTeam = filtered["FirstTeamName"],
+          firstScore = filtered["FirstTeamScore"],
+          secondTeam = filtered["SecondTeamName"],
+          secondScore = filtered["SecondTeamScore"],
+          winCondition = filtered["WinCondition"],
+          staticWinCondition = "Win Condition";
+
+        let renderSecondTeam = true;
+        let renderFirstScore = true;
+        let renderWinCondition = !!winCondition.length;
+
+        renderContent({
+          tournamentName,
+          firstTeam,
+          secondTeam,
+          firstScore,
+          secondScore,
+          winCondition,
+          staticWinCondition,
+          renderSecondTeam,
+          renderFirstScore,
+          renderWinCondition,
+          hook: () => {},
+        });
+      };
+
+      const renderScrimData = (parsedContent) => {
+        const filtered = parsedContent["Scrims"];
+
+        let tournamentName = "Scrims",
+          firstTeam = filtered["TeamOrKillerName"],
+          firstScore,
+          secondTeam,
+          secondScore,
+          winCondition,
+          staticWinCondition;
+
+        let renderWinCondition = false;
+        let renderSecondTeam = false;
+        let renderFirstScore = false;
+
+        renderContent({
+          tournamentName,
+          firstTeam,
+          firstScore,
+          secondTeam,
+          secondScore,
+          winCondition,
+          staticWinCondition,
+          renderSecondTeam,
+          renderFirstScore,
+          renderWinCondition,
+          hook: () => {},
+        });
+      };
+
+      const renderOneVOneData = (parsedContent) => {
+        const filtered = parsedContent["1v1"];
+
+        let tournamentName = "1v1",
+          firstTeam = filtered["FirstPlayerName"],
+          firstScore = filtered["FirstPlayerScore"],
+          secondTeam = filtered["SecondPlayerName"],
+          secondScore = filtered["SecondPlayerScore"],
+          winCondition = filtered["WinCondition"],
+          staticWinCondition = "Win Condition";
+
+        let renderSecondTeam = true;
+        let renderFirstScore = true;
+        let renderWinCondition = !!winCondition.length;
+
+        renderContent({
+          tournamentName,
+          firstTeam,
+          firstScore,
+          secondTeam,
+          secondScore,
+          winCondition,
+          staticWinCondition,
+          renderSecondTeam,
+          renderFirstScore,
+          renderWinCondition,
+          hook: () => {},
+        });
+      };
+
+      const renderWinStreakData = (parsedContent) => {
+        const filtered = parsedContent["Winstreak"];
+
+        let tournamentName = filtered["TeamName"],
+          firstTeam = "Current",
+          firstScore = filtered["CurrentScore"],
+          secondTeam,
+          secondScore,
+          winCondition = filtered["PersonalBest"],
+          staticWinCondition = "PB";
+
+        let renderSecondTeam = false;
+        let renderFirstScore = true;
+        let renderWinCondition = !!winCondition.length;
+
+        let hookFunc = ({ teamsEl, score1El: firstScoreEl }) => {
+          teamsEl.style.display = "flex";
+          teamsEl.style.justifyContent = "space-between";
+
+          firstScoreEl.classList.add("force-border-right");
+        };
+
+        renderContent({
+          tournamentName,
+          firstTeam,
+          firstScore,
+          secondTeam,
+          secondScore,
+          winCondition,
+          staticWinCondition,
+          renderSecondTeam,
+          renderFirstScore,
+          renderWinCondition,
+          hook: hookFunc,
+        });
+      };
+
+      let client = new XMLHttpRequest();
+
+      client.open("GET", "/config.ini");
+
+      client.onreadystatechange = () => {
+        if (!client.responseText.length) return;
+
+        const parsed = parseIniString(client.responseText);
+
+        switch (parsed["CategoryInit"]["DesiredCategory"].toLowerCase()) {
+          case "tournament":
+            renderTournamentData(parsed);
+            break;
+
+          case "1v1":
+            renderOneVOneData(parsed);
+            break;
+
+          case "scrims":
+            renderScrimData(parsed);
+            break;
+
+          case "winstreak":
+            renderWinStreakData(parsed);
+            break;
+
+          default:
+            console.log("SOMETHING IS BROKEN!");
+            break;
+        }
+
+        // adjustScale();
+      };
+
+      client.send();
     </script>
   </body>
 </html>
