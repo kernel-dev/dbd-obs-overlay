@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "obs-overlay-tauri",
+  "productName": "DBD OBS Overlay",
   "version": "0.1.0",
   "identifier": "com.kerneldev.dbdobs",
   "build": {
