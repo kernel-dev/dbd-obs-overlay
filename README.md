@@ -21,7 +21,7 @@ After that, you can switch categories (current supported ones are: `Tournament`,
 
 **The application itself serves the overlay at ``http://localhost:4000/overlay``, so this is what you'll add into your OBS browser source**.
 
-In order for the application to work seemlessly, and if you'd prefer not to do any additional work afterwards, I highly recommend you take a minute to set up OBS WebSockets. First what you're going to do is launch OBS, then go into `Tools -> WebSocket Server Settings` and turn on `Enable WebSocket Server`:
+In order for the application to work seemlessly, and if you'd prefer not to do any additional work afterwards, I highly recommend you take a minute to set up OBS WebSockets. First what you're going to do is launch OBS, then go into `Tools -> WebSocket Server Settings` and turn on `Enable WebSocket Server` **AND DISABLE AUTHENTICATION!!**:
 
 ![OBS WebSocket Settings](tutorial/image-1.png)
 
