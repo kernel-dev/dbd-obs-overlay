@@ -2,13 +2,12 @@ name: 'Publish Tauri Application'
 
 on:
   release:
-    types: [created] # This workflow runs when a new release is created
+    types: [published, edited]
 
 jobs:
   build-tauri:
-    # Use a matrix strategy to build for different operating systems
     strategy:
-      fail-fast: false # Allows other OS builds to continue if one fails
+      fail-fast: false
       matrix:
         platform: [macos-latest, ubuntu-latest, windows-latest]
 
