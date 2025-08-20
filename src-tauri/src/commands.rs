@@ -299,6 +299,21 @@ pub async fn refresh_obs_browser_source() -> Result<(), String> {
         .await
         .map_err(|e| format!("Failed to send refresh request: {}", e))?;
 
+    if let Some(msg_result) = read.next().await {
+        match msg_result {
+            Ok(msg) => {
+                let txt_data = msg
+                    .to_text()
+                    .map_err(|e| format!("Failed to convert Message to &str -> {}", e))?;
+
+                println!("Response from OBS received: {}", txt_data);
+            }
+            Err(e) => {
+                eprintln!("Error reading from OBS stream: {}", e);
+            }
+        }
+    }
+
     write
         .close()
         .await
