@@ -1,0 +1,106 @@
+.settings-container {
+  display: flex;
+  height: 100%;
+  background: #0f0f0f;
+  color: #eaeaea;
+  font-family: "Fira Code", "JetBrains Mono", monospace;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  width: 80%;
+  max-width: 900px;
+  height: 80%;
+  z-index: 1001;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.settings-list {
+  width: 220px;
+  border-right: 1px solid #2a2a2a;
+  background: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+}
+
+.settings-item {
+  padding: 12px 18px;
+  margin: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+  color: #a0a0a0;
+}
+
+.settings-item:hover {
+  background: #1a1a1a;
+  color: #eaeaea;
+}
+
+.settings-item.active {
+  background: #2a7dff;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.settings-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #a0a0a0;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-button:hover {
+  color: #eaeaea;
+}
+
+.settings-view .button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #4b5263;
+  margin-top: auto;
+  margin-bottom: 15px;
+  margin-right: 15px;
+}
+
+.settings-view .button-group button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.settings-view .apply-button {
+  background-color: #16a34a;
+  color: white;
+}
+
+.settings-view .apply-button:hover {
+  background-color: #118139;
+}
+
+.settings-view .cancel-button {
+  background-color: #555;
+  color: white;
+}
+
+.settings-view .cancel-button:hover {
+  background-color: #777;
+}

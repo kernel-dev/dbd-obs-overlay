@@ -1,0 +1,84 @@
+.editor-panel input[type="text"],
+.editor-panel input[type="number"],
+.editor-panel select {
+  padding: 8px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #3f3f3f;
+  color: white;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.editor-panel input[type="text"]:hover,
+.editor-panel input[type="number"]:hover,
+.editor-panel select:hover {
+  border-color: #777;
+}
+
+.editor-panel input[type="text"]:focus,
+.editor-panel input[type="number"]:focus,
+.editor-panel select:focus {
+  outline: none;
+  border-color: #2a7dff;
+  box-shadow: 0 0 10px rgba(42, 125, 255, 0.6);
+}
+
+.editor-panel input[type="number"]::-webkit-inner-spin-button,
+.editor-panel input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.editor-panel label {
+  display: flex;
+  margin-bottom: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  color: #ffe1e1;
+  font-weight: 500;
+}
+
+.collapsible-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.caret {
+  display: inline-block;
+  position: relative;
+  width: 12px;
+  height: 12px;
+}
+
+.caret::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: translateY(-50%) rotate(-45deg);
+  transform-origin: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.caret.expanded::before {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.collapsible-content-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-in-out;
+}
+
+.collapsible-content-wrapper.expanded {
+  max-height: 1000px;
+}

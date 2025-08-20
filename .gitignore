@@ -1,0 +1,22 @@
+# IDEs and OS files
+.DS_Store
+.env
+.idea/
+.vscode/
+
+# Node modules
+node_modules/
+
+# Tauri build and development artifacts
+src-tauri/target/
+src-tauri/src/tauri-binding/
+src-tauri/tauri.js/
+src-tauri/bin/
+src-tauri/gen/
+
+# Frontend build
+dist/
+
+package-lock.json
+tsconfig.tsbuildinfo
+Cargo.lock

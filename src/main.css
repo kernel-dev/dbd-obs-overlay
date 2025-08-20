@@ -1,0 +1,467 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+body {
+  font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+
+input,
+button,
+textarea,
+select,
+.file-ops label,
+.settings-button {
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background-color: #3f3f3f;
+  color: white;
+  font-size: 0.9em;
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="color"] {
+  width: 60px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="color"]:focus,
+select:focus {
+  outline: 2px solid #2a7dff;
+  outline-offset: 2px;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+input[type="range"] {
+  appearance: none;
+  width: 96%;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  outline: none;
+  transition: background 0.3s ease-in-out;
+}
+
+input[type="range"]:hover {
+  background: #c0c0c0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #2a7dff;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+  margin-top: -5px;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #1a60cc;
+  transform: scale(1.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.app-main-container {
+  height: 96vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content-wrapper {
+  flex-grow: 1;
+  padding-top: 30px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: 600px 1fr;
+  gap: 20px;
+  height: calc(100% - 30px);
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.editor-controls {
+  background-color: #2f2f2f;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow-y: auto;
+}
+
+.editor-controls h2 {
+  color: #61dafb;
+  margin-top: 0;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.editor-panel {
+  flex-grow: 1;
+  padding-right: 10px;
+}
+
+.editor-panel h3 {
+  color: #f8f8f2;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.card {
+  background-color: #3a3a3a;
+  padding: 15px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.card h4 {
+  color: #98c379;
+  margin-top: 0;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #4b5263;
+  padding-bottom: 5px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.9em;
+  color: #abb2bf;
+}
+
+.file-ops {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #3c4046;
+}
+
+.file-ops button,
+.file-ops label {
+  flex: 1 1 auto;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.95em;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.file-ops .load-btn {
+  background-color: #5d5dff;
+  color: white;
+}
+
+.file-ops .load-default-btn {
+  background-color: #9affce;
+  color: black;
+}
+
+.file-ops .save-btn {
+  background-color: #3cb371;
+  color: white;
+}
+
+.file-ops .download-btn {
+  background-color: #55a8e0;
+  color: white;
+}
+
+.file-ops button:hover:not(:disabled),
+.file-ops label:hover {
+  filter: brightness(1.1);
+}
+
+.file-ops button:disabled {
+  background-color: #4b5263;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.load-message {
+  text-align: center;
+  margin-top: 50px;
+  color: #888;
+  font-style: italic;
+  width: 100%;
+}
+
+.preview-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #21252b;
+  padding: 20px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.preview-area h3 {
+  color: #f8f8f2;
+}
+
+.toast-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+
+.notepad-toast-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #444;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  font-size: 0.95em;
+  line-height: 1.5;
+  text-align: left;
+  border: 1px solid #555;
+  box-sizing: border-box;
+}
+
+.notepad-toast-notification .notepad-toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #3a3a3a;
+  border-bottom: 1px solid #555;
+  border-radius: 10px 10px 0 0;
+}
+
+.notepad-toast-notification .notepad-toast-header h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.1em;
+}
+
+.notepad-toast-notification .notepad-toast-close-btn {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0 5px;
+  transition: color 0.2s ease;
+}
+
+.notepad-toast-notification .notepad-toast-close-btn:hover {
+  color: white;
+}
+
+.notepad-toast-notification .notepad-toast-content-scrollable {
+  flex-grow: 1;
+  overflow-y: auto;
+  width: 100%;
+  background-color: #303030;
+  padding: 20px;
+}
+
+.notepad-toast-notification pre {
+  margin: 0;
+  padding: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "Fira Code", "JetBrains Mono", "Source Code Pro", monospace;
+  color: #e0e0e0;
+}
+
+.ini-section-highlight {
+  color: #e0b983;
+  font-weight: bold;
+}
+
+.ini-key-highlight {
+  color: #61dafb;
+}
+
+.ini-value-highlight {
+  color: #98c379;
+}
+
+.ini-comment-highlight {
+  color: #888;
+  font-style: italic;
+}
+
+.file-ops button,
+.file-ops label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.settings-button {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: #3a3a3a;
+  border: none;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s ease;
+  z-index: 900;
+}
+
+.settings-button.dimmed {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.settings-button:hover {
+  background: #505050;
+}
+
+.settings-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border-radius: 10px;
+  padding: 20px;
+  width: 80%;
+  max-width: 900px;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1001;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.settings-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1.4em;
+  cursor: pointer;
+  z-index: 1002;
+}
+
+.settings-close-btn:hover {
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 50vh 50vh;
+    height: auto;
+    padding: 10px;
+  }
+
+  .editor-controls {
+    flex: none;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #3c4046;
+    max-height: calc(100% - 15px);
+    padding: 15px;
+  }
+
+  .editor-panel {
+    max-height: calc(100% - 100px);
+  }
+
+  .preview-area {
+    flex: none;
+    width: 100%;
+    height: calc(100% - 15px);
+    padding: 15px;
+  }
+
+  .file-ops {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .file-ops button,
+  .file-ops label {
+    flex: 1 1 45%;
+    font-size: 0.85em;
+    padding: 8px 10px;
+  }
+
+  .small-toast-notification {
+    max-width: 90%;
+    font-size: 0.8em;
+    padding: 8px 15px;
+  }
+
+  .notepad-toast-notification {
+    max-width: 95%;
+    font-size: 0.8em;
+  }
+
+  .notepad-toast-notification .notepad-toast-header {
+    padding: 10px 15px;
+  }
+
+  .notepad-toast-notification .notepad-toast-content-scrollable {
+    padding: 15px;
+  }
+}

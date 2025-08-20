@@ -1,0 +1,108 @@
+@keyframes popInNotepad {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -50%) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.notepad-toast-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  background-color: #444;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  font-size: 0.95em;
+  border: 1px solid #555;
+}
+
+.notepad-toast-notification.show {
+  animation: popInNotepad 0.4s ease forwards;
+}
+
+.notepad-toast-notification.hide {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.85);
+}
+
+.notepad-toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #3a3a3a;
+  border-bottom: 1px solid #555;
+}
+
+.notepad-toast-header h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.1em;
+}
+
+.notepad-toast-close-btn {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0 5px;
+  transition: color 0.2s ease;
+}
+
+.notepad-toast-close-btn:hover {
+  color: white;
+}
+
+.notepad-toast-content-scrollable {
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: #303030;
+  padding: 20px;
+}
+
+.notepad-toast-content-scrollable pre {
+  margin: 0;
+  padding: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: "Fira Code", "JetBrains Mono", "Source Code Pro", monospace;
+  color: #e0e0e0;
+}
+
+/* INI syntax highlights */
+.ini-section-highlight {
+  color: #e0b983;
+  font-weight: bold;
+}
+.ini-key-highlight {
+  color: #61dafb;
+}
+.ini-value-highlight {
+  color: #98c379;
+}
+.ini-comment-highlight {
+  color: #888;
+  font-style: italic;
+}
