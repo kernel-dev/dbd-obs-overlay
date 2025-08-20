@@ -215,11 +215,14 @@ const Preview: React.FC<PreviewProps> = ({
       };
   }
 
-  const teamsClasses = [
-    "teams",
-    `teams-tourney-align-${alignment.tourney}`,
-    `teams-win-con-align-${alignment.winCon}`,
-  ].join(" ");
+  let tourneyAlign = data.name
+    ? `teams-tourney-align-${alignment.tourney}`
+    : "";
+  let winConAlign = data.winCon
+    ? `teams-win-con-align-${alignment.winCon}`
+    : "";
+
+  const teamsClasses = ["teams", tourneyAlign, winConAlign].join(" ");
 
   return (
     <div
