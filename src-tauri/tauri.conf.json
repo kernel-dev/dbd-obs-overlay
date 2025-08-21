@@ -36,7 +36,9 @@
       "icons/icon.ico"
     ],
     "resources": {
-      "../resources/config/*": "resources/config"
+      "../resources/config/*": "resources/config",
+      "../dist/src/*": "dist/src",
+      "../dist/assets/*": "dist/assets"
     }
   }
 }

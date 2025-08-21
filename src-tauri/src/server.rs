@@ -1,6 +1,5 @@
 use std::collections::HashMap;
-use std::fs;
-use std::path::{Path, PathBuf};
+use include_dir::{include_dir, Dir};
 use std::sync::{Arc, Mutex};
 use std::thread;
 
@@ -12,7 +11,7 @@ use tokio::sync::mpsc;
 use tokio_tungstenite::tungstenite::Message;
 use uuid::Uuid;
 
-use crate::commands::refresh_obs_browser_source;
+static DIST_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/../dist");
 
 pub struct Client {
     pub id: String,
@@ -36,10 +35,6 @@ impl OverlayServer {
     pub fn start_http_server(&self) {
         let addr = "127.0.0.1:4000";
         let server = TinyHttpServer::http(addr).expect("Failed to start HTTP server");
-        let dist_dir = Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../dist")
-            .canonicalize()
-            .expect("Failed to canonicalize dist path");
 
         println!("HTTP overlay server running at http://{}", addr);
 
@@ -47,20 +42,15 @@ impl OverlayServer {
             for request in server.incoming_requests() {
                 let url_path = request.url().trim_start_matches('/');
 
-                let file_path: PathBuf = if url_path == "overlay" || url_path.is_empty() {
-                    dist_dir.join("src/overlay.html")
+                let file = if url_path == "overlay" || url_path.is_empty() {
+                    DIST_DIR.get_file("src/overlay.html")
                 } else {
-                    let candidate = dist_dir.join(url_path);
-                    if candidate.exists() && candidate.is_file() {
-                        candidate
-                    } else {
-                        PathBuf::new()
-                    }
+                    DIST_DIR.get_file(url_path)
                 };
 
-                let response = if file_path.exists() && file_path.is_file() {
-                    let content = fs::read(&file_path).unwrap_or_default();
-                    let mime = match file_path.extension().and_then(|s| s.to_str()) {
+                let response = if let Some(file) = file {
+                    let content = file.contents();
+                    let mime = match file.path().extension().and_then(|s| s.to_str()) {
                         Some("css") => "text/css",
                         Some("js") => "application/javascript",
                         Some("html") => "text/html",
@@ -80,7 +70,7 @@ impl OverlayServer {
     }
 
     pub async fn start_ws_server(
-        &self,  
+        &self,
         ws_addr: &str,
     ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         println!("WebSocket server running on ws://{}", ws_addr);
