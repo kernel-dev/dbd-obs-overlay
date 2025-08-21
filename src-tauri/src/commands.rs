@@ -7,6 +7,7 @@ use futures_util::{SinkExt, StreamExt};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
+use tokio::fs::create_dir;
 use std::fs;
 use std::io::Read;
 use std::sync::Arc;
@@ -134,7 +135,13 @@ pub async fn save_file_as(app: AppHandle, content: String) -> Result<Option<Open
 #[command]
 pub async fn load_default_config(handle: AppHandle) -> Result<Option<OpenResult>, String> {
     let base = dirs::data_local_dir().ok_or("Could not resolve %LOCALAPPDATA%")?;
-    let path = base.join("dbd-overlay-config").join("config.ini");
+    let mut path = base.join("dbd-overlay-config");
+
+    if !path.exists() {
+        let _ = create_dir(&path).await;
+    }
+
+    path = path.join("config.ini");
 
     let mut content = String::new();
 
@@ -148,7 +155,7 @@ pub async fn load_default_config(handle: AppHandle) -> Result<Option<OpenResult>
 
         let mut static_config = String::new();
 
-        fs::File::open(&static_config_path)
+        let _ = fs::File::open(&static_config_path)
             .map_err(|e| format!("Error while reading static config: {}", e))
             .unwrap()
             .read_to_string(&mut static_config);
