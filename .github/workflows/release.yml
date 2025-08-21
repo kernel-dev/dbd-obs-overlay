@@ -48,8 +48,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: DBD-OBS-Overlay-v0.1.0
-          releaseName: 'DBD OBS Overlay v0.1.0'
+          tagName: ${{ github.ref_name }}
+          releaseName: 'DBD OBS Overlay ${{ github.ref_name }}'
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: false
           prerelease: false
