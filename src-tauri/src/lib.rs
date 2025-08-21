@@ -21,9 +21,6 @@ pub async fn run() {
     let http_server_clone = overlay_server.clone();
     std::thread::spawn(move || {
         http_server_clone.start_http_server();
-        loop {
-            std::thread::park();
-        }
     });
 
     let ws_server_clone = overlay_server.clone();
